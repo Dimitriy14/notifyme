@@ -45,3 +45,7 @@ func (t UnixTime) String() string { return fmt.Sprintf("%d", time.Time(t).Unix()
 func (t UnixTime) SubDay() UnixTime {
 	return UnixTime(time.Time(t).AddDate(0, 0, -1))
 }
+
+func (t UnixTime) Format() string {
+	return time.Time(t).Format("20060102")
+}
