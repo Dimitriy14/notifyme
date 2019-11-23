@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/Dimitriy14/notifyme/logger"
+
 	"github.com/Dimitriy14/notifyme/config"
 	"github.com/Dimitriy14/notifyme/models"
 	"github.com/Dimitriy14/notifyme/services/common"
@@ -49,6 +51,8 @@ func (p *posterImpl) GetCashShiftByID(id int) (models.CashShift, error) {
 		return models.CashShift{}, err
 	}
 	defer common.CloseRespBody(resp)
+
+	logger.Log.Debugf("Received body from %s : %s", posterURL.String(), string(body))
 
 	var posterResp posterResponse
 	err = json.Unmarshal(body, &posterResp)
