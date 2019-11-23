@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/Dimitriy14/notifyme/logger"
 
@@ -16,7 +15,7 @@ import (
 )
 
 type Poster interface {
-	GetCashShifts(date time.Time) ([]models.CashShift, error)
+	GetCashShifts(date models.UnixTime) ([]models.CashShift, error)
 }
 
 func NewPoster() Poster {
@@ -30,7 +29,7 @@ type posterResponse struct {
 	Response []models.CashShift `json:"response"`
 }
 
-func (p *posterImpl) GetCashShifts(date time.Time) ([]models.CashShift, error) {
+func (p *posterImpl) GetCashShifts(date models.UnixTime) ([]models.CashShift, error) {
 	posterURL, err := url.Parse(config.Conf.PosterURL)
 	if err != nil {
 		return nil, err
