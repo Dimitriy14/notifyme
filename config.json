@@ -3,5 +3,15 @@
   "BasePath":"/notifyme",
 
   "PosterURL": "https://joinposter.com",
-  "Token": "615479:4502236d1e23f40a9a9e4635a98ba68d"
+  "Token": "615479:4502236d1e23f40a9a9e4635a98ba68d",
+
+  "HerokuPg":"postgres://rrvxhzckowcqgl:6046ccdb7566469e3ed006d380068ca2bb15cb974f1ad23a5e26a6388de80b48@ec2-54-246-92-116.eu-west-1.compute.amazonaws.com:5432/d3utt2vfngvic8",
+
+  "Postgres": {
+    "Host": "localhost",
+    "Port": "5432",
+    "DBName": "notifyme",
+    "User": "admin",
+    "Password": "1488"
+  }
 }

@@ -2,6 +2,9 @@ package apploader
 
 import (
 	"fmt"
+
+	"github.com/Dimitriy14/notifyme/postgres"
+
 	"github.com/Dimitriy14/notifyme/config"
 	"github.com/Dimitriy14/notifyme/logger"
 	"github.com/pkg/errors"
@@ -18,8 +21,17 @@ var basicLoaders = LoaderList{
 	{"logger", logger.Load},
 }
 
+var clientLoaders = LoaderList{
+	{"postgres", postgres.Load},
+}
+
 func LoadApplicationServices() error {
 	err := executeLoaders(basicLoaders)
+	if err != nil {
+		return err
+	}
+
+	err = executeLoaders(clientLoaders)
 	if err != nil {
 		return err
 	}

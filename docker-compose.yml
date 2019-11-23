@@ -1,0 +1,12 @@
+﻿version: "3.7"
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_DB: notifyme
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 1488
+    ports:
+      - "5432:5432"

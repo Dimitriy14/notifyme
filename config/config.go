@@ -3,8 +3,9 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/kelseyhightower/envconfig"
 	"os"
+
+	"github.com/kelseyhightower/envconfig"
 )
 
 var (
@@ -19,9 +20,19 @@ type Configuration struct {
 
 	PosterURL string `json:"PosterURL" default:"https://joinposter.com"`
 	Token     string `json:"Token"`
-	
+
 	LogLevel string `json:"LogLevel" default:"debug"`
-	LogFile string
+	LogFile  string
+
+	HerokuPg string `json:"HerokuPg" environment:"DATABASE_URL"`
+
+	Postgres struct {
+		Host     string `json:"Host"`
+		Port     string `json:"Port"`
+		DBName   string `json:"DBName" default:"notifyme"`
+		User     string `json:"User" default:"admin"`
+		Password string `json:"Password" default:"1488"`
+	} `json:"Postgres"`
 }
 
 func Load() error {

@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/gorilla/mux v1.7.3
+	github.com/jinzhu/gorm v1.9.11
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/pkg/errors v0.8.1
