@@ -39,7 +39,7 @@ func (p *posterImpl) GetCashShifts(date models.UnixTime) ([]models.CashShift, er
 	val.Add("dateFrom", fmt.Sprintf("%s", date.String()))
 	val.Add("dateTo", fmt.Sprintf("%s", date.String()))
 
-	posterURL.Path = "/api/finance.getCashShift"
+	posterURL.Path = "/api/finance.getCashShifts"
 	posterURL.RawQuery = val.Encode()
 
 	resp, err := http.Get(posterURL.String())
