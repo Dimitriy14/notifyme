@@ -8,6 +8,8 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/pkg/errors v0.8.1
+	github.com/rs/cors v1.7.0
 	github.com/sirupsen/logrus v1.4.2
+	github.com/urfave/negroni v1.0.0
 	golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e // indirect
 )

@@ -5,6 +5,8 @@ import (
 
 	"github.com/Dimitriy14/notifyme/postgres"
 	"github.com/Dimitriy14/notifyme/repository"
+	"github.com/rs/cors"
+	"github.com/urfave/negroni"
 
 	"github.com/Dimitriy14/notifyme/config"
 	"github.com/Dimitriy14/notifyme/integration"
@@ -24,5 +26,15 @@ func NewRouter() *mux.Router {
 	router.HandleFunc("/filter", filterService.GetFilter).Methods(http.MethodGet)
 	router.HandleFunc("/filter", filterService.AddFilter).Methods(http.MethodPost)
 	router.HandleFunc("/filter", filterService.DeleteFilter).Methods(http.MethodDelete)
-	return router
+
+	corsRouter := mux.NewRouter()
+	{
+		corsRouter.PathPrefix(config.Conf.BasePath).Handler(negroni.New(
+			cors.New(cors.Options{
+				AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
+			}),
+			negroni.Wrap(router),
+		))
+	}
+	return corsRouter
 }
