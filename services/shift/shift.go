@@ -36,6 +36,7 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 	}
 	defer common.CloseReqBody(r)
 
+	logger.Log.Debugf("Received body: %s", string(body))
 	if err = json.Unmarshal(body, &shift); err != nil {
 		logger.Log.Errorf("Unmarshaling: err=%s", err)
 		common.SendError(w, http.StatusBadRequest, "Unmarshal body err= %s\n", err)
