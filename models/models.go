@@ -9,15 +9,16 @@ import (
 type WebHookTransaction struct {
 	ID   int      `json:"object_id"`
 	Time UnixTime `json:"time"`
+	Data string   `json:"data"`
 }
 
 type CashShift struct {
-	ID             uint64   `json:"cash_shift_id"`
-	SpotID         uint64   `json:"spot_id"`
+	ID             string   `json:"cash_shift_id"`
+	SpotID         string   `json:"spot_id"`
 	TimeStart      UnixTime `json:"time_start"`
 	TimeEnd        UnixTime `json:"time_end"`
-	AmountSellCash uint64   `json:"amount_sell_cash"`
-	AmountSellCard uint64   `json:"amount_sell_card"`
+	AmountSellCash string   `json:"amount_sell_cash"`
+	AmountSellCard string   `json:"amount_sell_card"`
 }
 
 type Shifts []CashShift

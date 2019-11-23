@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/Dimitriy14/notifyme/integration"
 	"github.com/Dimitriy14/notifyme/logger"
@@ -44,6 +45,11 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 	}
 
 	logger.Log.Debugf("data: %s", tx.Time.String())
+
+	if !strings.Contains(tx.Data, "shift_close") {
+		return
+	}
+
 	cashShift, err := c.poster.GetCashShifts(tx.Time, tx.Time)
 	if err != nil {
 		logger.Log.Errorf("GetCashShiftByID: err=%s", err)
