@@ -50,6 +50,6 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.Log.Debugf("CashShift: %#s", cashShift)
+	logger.Log.Debugf("CashShift: %#v", cashShift)
 	common.RenderJSON(w, &cashShift)
 }
