@@ -58,5 +58,6 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 	}
 
 	logger.Log.Debugf("CashShift: %#v", cashShift)
+	logger.Log.Debugf("CashShiftMap: %#v", cashShift.GetMapShifts())
 	common.RenderJSON(w, &cashShift)
 }

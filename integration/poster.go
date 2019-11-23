@@ -15,7 +15,7 @@ import (
 )
 
 type Poster interface {
-	GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixTime) ([]models.CashShift, error)
+	GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixTime) (models.Shifts, error)
 }
 
 func NewPoster() Poster {
@@ -29,7 +29,7 @@ type posterResponse struct {
 	Response []models.CashShift `json:"response"`
 }
 
-func (p *posterImpl) GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixTime) ([]models.CashShift, error) {
+func (p *posterImpl) GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixTime) (models.Shifts, error) {
 	posterURL, err := url.Parse(config.Conf.PosterURL)
 	if err != nil {
 		return nil, err

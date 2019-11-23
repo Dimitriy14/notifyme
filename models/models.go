@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+type Money uint64
+
 type WebHookTransaction struct {
 	ID   int      `json:"object_id"`
 	Time UnixTime `json:"time"`
@@ -13,15 +15,33 @@ type WebHookTransaction struct {
 }
 
 type CashShift struct {
-	ID             string   `json:"cash_shift_id"`
-	SpotID         string   `json:"spot_id"`
-	TimeStart      UnixTime `json:"time_start"`
-	TimeEnd        UnixTime `json:"time_end"`
-	AmountSellCash string   `json:"amount_sell_cash"`
-	AmountSellCard string   `json:"amount_sell_card"`
+	ID             string `json:"cash_shift_id"`
+	SpotID         string `json:"spot_id"`
+	SpotName       string `json:"spot_name"`
+	SpotAddress    string `json:"spot_adress"`
+	AmountSellCash int    `json:"amount_sell_cash,string"`
+	AmountSellCard int    `json:"amount_sell_card,string"`
 }
 
 type Shifts []CashShift
+
+func (s Shifts) GetMapShifts() map[string]CashShift {
+	m := make(map[string]CashShift)
+	for _, shift := range s {
+		currentShift, ok := m[shift.SpotID]
+		if !ok {
+			m[shift.SpotID] = shift
+			continue
+		}
+
+		currentShift.AmountSellCard += shift.AmountSellCard
+		currentShift.AmountSellCash += shift.AmountSellCash
+
+		m[shift.SpotID] = currentShift
+	}
+
+	return m
+}
 
 type UnixTime time.Time
 
