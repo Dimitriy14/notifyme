@@ -41,3 +41,7 @@ func (t *UnixTime) UnmarshalJSON(s []byte) (err error) {
 }
 
 func (t UnixTime) String() string { return fmt.Sprintf("%d", time.Time(t).Unix()) }
+
+func (t UnixTime) SubDay() UnixTime {
+	return UnixTime(time.Time(t).AddDate(0, 0, 1))
+}

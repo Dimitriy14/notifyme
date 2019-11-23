@@ -15,7 +15,7 @@ import (
 )
 
 type Poster interface {
-	GetCashShifts(date models.UnixTime) ([]models.CashShift, error)
+	GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixTime) ([]models.CashShift, error)
 }
 
 func NewPoster() Poster {
@@ -29,15 +29,15 @@ type posterResponse struct {
 	Response []models.CashShift `json:"response"`
 }
 
-func (p *posterImpl) GetCashShifts(date models.UnixTime) ([]models.CashShift, error) {
+func (p *posterImpl) GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixTime) ([]models.CashShift, error) {
 	posterURL, err := url.Parse(config.Conf.PosterURL)
 	if err != nil {
 		return nil, err
 	}
 	val := url.Values{}
 	val.Set("token", config.Conf.Token)
-	val.Add("dateFrom", fmt.Sprintf("%s", date.String()))
-	val.Add("dateTo", fmt.Sprintf("%s", date.String()))
+	val.Add("dateFrom", fmt.Sprintf("%s", dateFrom.String()))
+	val.Add("dateTo", fmt.Sprintf("%s", dateTo.String()))
 
 	posterURL.Path = "/api/finance.getCashShifts"
 	posterURL.RawQuery = val.Encode()
