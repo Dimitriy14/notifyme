@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -36,14 +35,12 @@ func (t *UnixTime) UnmarshalJSON(s []byte) (err error) {
 	if err != nil {
 		return err
 	}
-	*(*time.Time)(t) = time.Unix(q/1000, 0)
-	return
+	*t = UnixTime(time.Unix(q, 0))
+	return nil
 }
 
-func (t UnixTime) String() string { return fmt.Sprintf("%d", time.Time(t).Unix()) }
-
-func (t UnixTime) SubDay() UnixTime {
-	return UnixTime(time.Time(t).AddDate(0, 0, -1))
+func (t UnixTime) String() string {
+	return time.Time(t).String()
 }
 
 func (t UnixTime) Format() string {

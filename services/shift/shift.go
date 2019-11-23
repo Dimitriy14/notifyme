@@ -43,7 +43,8 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cashShift, err := c.poster.GetCashShifts(tx.Time.SubDay(), tx.Time)
+	logger.Log.Debugf("data: %s", tx.Time.String())
+	cashShift, err := c.poster.GetCashShifts(tx.Time, tx.Time)
 	if err != nil {
 		logger.Log.Errorf("GetCashShiftByID: err=%s", err)
 		common.SendError(w, http.StatusInternalServerError, "Unmarshal body err= %s\n", err)
