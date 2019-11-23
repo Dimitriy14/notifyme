@@ -7,7 +7,7 @@ import (
 
 type Repository interface {
 	GetFilters() ([]models.ProductFiler, error)
-	SaveFilter(filter models.ProductFiler) (models.ProductFiler, error)
+	SaveFilter(filter []models.ProductFiler) ([]models.ProductFiler, error)
 	DeleteFilter(filter models.ProductFiler) error
 }
 
@@ -29,11 +29,14 @@ func (r *repoImpl) GetFilters() ([]models.ProductFiler, error) {
 	return filters, nil
 }
 
-func (r *repoImpl) SaveFilter(filter models.ProductFiler) (models.ProductFiler, error) {
-	if err := r.db.Session.Save(&filter).Error; err != nil {
-		return models.ProductFiler{}, err
+func (r *repoImpl) SaveFilter(filters []models.ProductFiler) ([]models.ProductFiler, error) {
+	for _, filter := range filters {
+		if err := r.db.Session.Save(&filter).Error; err != nil {
+			return nil, err
+		}
 	}
-	return filter, nil
+
+	return filters, nil
 }
 func (r *repoImpl) DeleteFilter(filter models.ProductFiler) error {
 	if err := r.db.Session.Delete(&filter).Error; err != nil {

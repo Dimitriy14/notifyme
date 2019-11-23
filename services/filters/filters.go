@@ -50,22 +50,22 @@ func (f *filterImpl) AddFilter(w http.ResponseWriter, r *http.Request) {
 	}
 	defer common.CloseReqBody(r)
 
-	var filter models.ProductFiler
-	err = json.Unmarshal(body, &filter)
+	var filters []models.ProductFiler
+	err = json.Unmarshal(body, &filters)
 	if err != nil {
 		logger.Log.Errorf("unmarshal body err=%s", err)
 		common.SendError(w, http.StatusBadRequest, "unmarshal body", err)
 		return
 	}
 
-	filter, err = f.repo.SaveFilter(filter)
+	filters, err = f.repo.SaveFilter(filters)
 	if err != nil {
 		logger.Log.Errorf("saving filter err=%s", err)
 		common.SendInternalServerError(w, "saving filter", err)
 		return
 	}
 
-	common.RenderJSON(w, &filter)
+	common.RenderJSON(w, &filters)
 }
 
 func (f *filterImpl) DeleteFilter(w http.ResponseWriter, r *http.Request) {
