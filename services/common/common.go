@@ -3,6 +3,7 @@ package common
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Dimitriy14/notifyme/logger"
 	"net/http"
 )
 
@@ -57,7 +58,7 @@ func SendError(w http.ResponseWriter, code int, message string, err error) {
 	}
 	data, err := json.Marshal(createError(message))
 	if err != nil {
-		fmt.Printf(message, "helpers.SendError: %v", err)
+		logger.Log.Errorf(message, "helpers.SendError: %v", err)
 	}
 	render(w, code, data)
 }
@@ -84,7 +85,7 @@ func CloseRespBody(resp *http.Response) {
 	}
 	err := resp.Body.Close()
 	if err != nil {
-		fmt.Printf("failed to close response body (err: %v)\n", err)
+		logger.Log.Errorf("failed to close response body (err: %v)\n", err)
 	}
 }
 
@@ -95,7 +96,7 @@ func CloseReqBody(req *http.Request) {
 	}
 	err := req.Body.Close()
 	if err != nil {
-		fmt.Printf("failed to close request body (err: %v)\n", err)
+		logger.Log.Errorf("failed to close request body (err: %v)\n", err)
 	}
 }
 

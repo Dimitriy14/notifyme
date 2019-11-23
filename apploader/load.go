@@ -3,6 +3,7 @@ package apploader
 import (
 	"fmt"
 	"github.com/Dimitriy14/notifyme/config"
+	"github.com/Dimitriy14/notifyme/logger"
 	"github.com/pkg/errors"
 )
 
@@ -14,6 +15,7 @@ type LoaderList []struct {
 
 var basicLoaders = LoaderList{
 	{"config", config.Load}, //config should be loaded first
+	{"logger", logger.Load},
 }
 
 func LoadApplicationServices() error {

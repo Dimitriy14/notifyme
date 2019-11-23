@@ -3,12 +3,13 @@ package integration
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Dimitriy14/notifyme/config"
-	"github.com/Dimitriy14/notifyme/models"
-	"github.com/Dimitriy14/notifyme/services/common"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+
+	"github.com/Dimitriy14/notifyme/config"
+	"github.com/Dimitriy14/notifyme/models"
+	"github.com/Dimitriy14/notifyme/services/common"
 )
 
 type Poster interface {
@@ -27,7 +28,6 @@ type posterResponse struct {
 }
 
 func (p *posterImpl) GetCashShiftByID(id int) (models.CashShift, error) {
-	fmt.Println("Started getting")
 	posterURL, err := url.Parse(config.Conf.PosterURL)
 	if err != nil {
 		return models.CashShift{}, err
@@ -39,7 +39,6 @@ func (p *posterImpl) GetCashShiftByID(id int) (models.CashShift, error) {
 	posterURL.Path = "/api/finance.getCashShift"
 	posterURL.RawQuery = val.Encode()
 
-	fmt.Println(posterURL.String())
 	resp, err := http.Get(posterURL.String())
 	if err != nil {
 		return models.CashShift{}, err
@@ -53,7 +52,7 @@ func (p *posterImpl) GetCashShiftByID(id int) (models.CashShift, error) {
 
 	var posterResp posterResponse
 	err = json.Unmarshal(body, &posterResp)
-	if err!=nil{
+	if err != nil {
 		return models.CashShift{}, err
 	}
 

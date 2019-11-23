@@ -19,6 +19,9 @@ type Configuration struct {
 
 	PosterURL string `json:"PosterURL" default:"https://joinposter.com"`
 	Token     string `json:"Token"`
+	
+	LogLevel string `json:"LogLevel" default:"debug"`
+	LogFile string
 }
 
 func Load() error {
