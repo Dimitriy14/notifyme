@@ -2,8 +2,9 @@ package models
 
 import "time"
 
-type ClosedShift struct {
-	ID int `json:"object_id"`
+type WebHookTransaction struct {
+	ID   int       `json:"object_id"`
+	Time time.Time `json:"time"`
 }
 
 type CashShift struct {
@@ -15,5 +16,4 @@ type CashShift struct {
 	AmountSellCard uint64    `json:"amount_sell_card"`
 }
 
-type WebHookTransaction struct {
-}
+type Shifts []CashShift

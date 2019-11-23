@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/Dimitriy14/notifyme/logger"
 
@@ -15,7 +16,7 @@ import (
 )
 
 type Poster interface {
-	GetCashShiftByID(id int) (models.CashShift, error)
+	GetCashShifts(date time.Time) ([]models.CashShift, error)
 }
 
 func NewPoster() Poster {
@@ -26,29 +27,30 @@ type posterImpl struct {
 }
 
 type posterResponse struct {
-	Response models.CashShift `json:"response"`
+	Response []models.CashShift `json:"response"`
 }
 
-func (p *posterImpl) GetCashShiftByID(id int) (models.CashShift, error) {
+func (p *posterImpl) GetCashShifts(date time.Time) ([]models.CashShift, error) {
 	posterURL, err := url.Parse(config.Conf.PosterURL)
 	if err != nil {
-		return models.CashShift{}, err
+		return nil, err
 	}
 	val := url.Values{}
 	val.Set("token", config.Conf.Token)
-	val.Add("cash_shift_id", fmt.Sprintf("%d", id))
+	val.Add("dateFrom", fmt.Sprintf("%s", date.String()))
+	val.Add("dateTo", fmt.Sprintf("%s", date.String()))
 
 	posterURL.Path = "/api/finance.getCashShift"
 	posterURL.RawQuery = val.Encode()
 
 	resp, err := http.Get(posterURL.String())
 	if err != nil {
-		return models.CashShift{}, err
+		return nil, err
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return models.CashShift{}, err
+		return nil, err
 	}
 	defer common.CloseRespBody(resp)
 
@@ -57,7 +59,7 @@ func (p *posterImpl) GetCashShiftByID(id int) (models.CashShift, error) {
 	var posterResp posterResponse
 	err = json.Unmarshal(body, &posterResp)
 	if err != nil {
-		return models.CashShift{}, err
+		return nil, err
 	}
 
 	return posterResp.Response, nil

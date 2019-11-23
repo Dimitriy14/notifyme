@@ -27,7 +27,7 @@ type closerImpl struct {
 
 func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 	var (
-		shift models.ClosedShift
+		tx models.WebHookTransaction
 	)
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -37,13 +37,13 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 	defer common.CloseReqBody(r)
 
 	logger.Log.Debugf("Received body: %s", string(body))
-	if err = json.Unmarshal(body, &shift); err != nil {
+	if err = json.Unmarshal(body, &tx); err != nil {
 		logger.Log.Errorf("Unmarshaling: err=%s", err)
 		common.SendError(w, http.StatusBadRequest, "Unmarshal body err= %s\n", err)
 		return
 	}
 
-	cashShift, err := c.poster.GetCashShiftByID(shift.ID)
+	cashShift, err := c.poster.GetCashShifts(tx.Time)
 	if err != nil {
 		logger.Log.Errorf("GetCashShiftByID: err=%s", err)
 		common.SendError(w, http.StatusInternalServerError, "Unmarshal body err= %s\n", err)
