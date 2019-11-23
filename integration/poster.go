@@ -43,12 +43,12 @@ func (p *posterImpl) GetCashShiftByID(id int) (models.CashShift, error) {
 	if err != nil {
 		return models.CashShift{}, err
 	}
-	defer common.CloseRespBody(resp)
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return models.CashShift{}, err
 	}
+	defer common.CloseRespBody(resp)
 
 	var posterResp posterResponse
 	err = json.Unmarshal(body, &posterResp)
