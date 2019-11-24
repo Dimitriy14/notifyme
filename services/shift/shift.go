@@ -106,14 +106,21 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		resp, err := http.Post(config.Conf.MailServiceURL, common.ApplicationJSON, bytes.NewReader(content))
+		logger.Log.Debugf("Mail content: %s", string(content))
+		response, err := http.Post(config.Conf.MailServiceURL, "application/json", bytes.NewReader(content))
 		if err != nil {
 			logger.Log.Errorf("Sending to mail service(url=%s): err=%s", config.Conf.MailServiceURL, err)
 			common.SendError(w, http.StatusInternalServerError, "Result marshal err= %s\n", err)
 			return
 		}
 
-		logger.Log.Debugf("Mail service %s response status: %d", config.Conf.MailServiceURL, resp.StatusCode)
+		bodyResp, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			logger.Log.Errorf("Sending to mail service(url=%s): err=%s", config.Conf.MailServiceURL, err)
+			common.SendError(w, http.StatusInternalServerError, "Result marshal err= %s\n", err)
+			return
+		}
+		logger.Log.Debugf("Mail service %s response status: %d   %s", config.Conf.MailServiceURL, response.StatusCode, string(bodyResp))
 	}
 
 	common.RenderJSON(w, &cashShifts)
