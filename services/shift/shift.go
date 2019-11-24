@@ -85,7 +85,7 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 		for _, f := range filters {
 			for _, p := range ps {
 				if p.ProductID == f.ProductID {
-					result = append(result, f)
+					result = append(result, p)
 				}
 			}
 		}
