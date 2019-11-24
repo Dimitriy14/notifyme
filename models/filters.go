@@ -4,7 +4,6 @@ import "github.com/jinzhu/gorm"
 
 type ProductFiler struct {
 	gorm.Model  `json:"-"`
-	SpotID      string `json:"spot_id"`
 	UserEmail   string `json:"user_email"`
 	ProductID   string `json:"product_id"`
 	ProductName string `json:"product_name"`

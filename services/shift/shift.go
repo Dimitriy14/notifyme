@@ -85,15 +85,16 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 		for _, f := range filters {
 			for _, p := range ps {
 				if p.ProductID == f.ProductID {
+					p.UserEmail = f.UserEmail
 					result = append(result, p)
 				}
 			}
 		}
 
 		mail := models.Mail{
+			Date:           tx.Time.Format(),
 			SpotID:         spotID,
 			SpotName:       shift.SpotName,
-			SpotAddress:    shift.SpotAddress,
 			AmountSellCash: shift.AmountSellCash,
 			AmountSellCard: shift.AmountSellCard,
 			Products:       result,

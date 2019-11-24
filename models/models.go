@@ -7,9 +7,9 @@ import (
 )
 
 type Mail struct {
+	Date           string         `json:"date"`
 	SpotID         string         `json:"spot_id"`
 	SpotName       string         `json:"spot_name"`
-	SpotAddress    string         `json:"spot_adress"`
 	AmountSellCash int            `json:"amount_sell_cash,string"`
 	AmountSellCard int            `json:"amount_sell_card,string"`
 	Products       []ProductFiler `json:"products"`

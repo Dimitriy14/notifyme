@@ -100,10 +100,6 @@ func (p *posterImpl) GetProducts(spotID string, dateFrom models.UnixTime, dateTo
 		return nil, err
 	}
 
-	for _, f := range posterResp.Response {
-		f.SpotID = spotID
-	}
-
 	logger.Log.Debugf("Received data from %s : %v", posterURL.String(), posterResp.Response)
 
 	return posterResp.Response, nil
