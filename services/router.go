@@ -18,8 +18,8 @@ import (
 func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true).PathPrefix(config.Conf.BasePath).Subrouter()
 	poster := integration.NewPoster()
-	shiftService := shift.NewShiftService(poster)
 	repo := repository.NewRepo(postgres.Client)
+	shiftService := shift.NewShiftService(poster, repo)
 	filterService := filters.NewFilterService(poster, repo)
 
 	router.HandleFunc("/close", shiftService.Close).Methods(http.MethodPost)

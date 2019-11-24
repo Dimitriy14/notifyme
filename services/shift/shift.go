@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Dimitriy14/notifyme/repository"
+
 	"github.com/Dimitriy14/notifyme/integration"
 	"github.com/Dimitriy14/notifyme/logger"
 	"github.com/Dimitriy14/notifyme/models"
@@ -16,14 +18,16 @@ type Closer interface {
 	Close(w http.ResponseWriter, r *http.Request)
 }
 
-func NewShiftService(poster integration.Poster) Closer {
+func NewShiftService(poster integration.Poster, repo repository.Repository) Closer {
 	return &closerImpl{
 		poster: poster,
+		repo:   repo,
 	}
 }
 
 type closerImpl struct {
 	poster integration.Poster
+	repo   repository.Repository
 }
 
 func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
@@ -50,12 +54,41 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cashShift, err := c.poster.GetCashShifts(tx.Time, tx.Time)
+	cashShifts, err := c.poster.GetCashShifts(tx.Time, tx.Time)
 	if err != nil {
 		logger.Log.Errorf("GetCashShiftByID: err=%s", err)
 		common.SendError(w, http.StatusInternalServerError, "Unmarshal body err= %s\n", err)
 		return
 	}
 
-	common.RenderJSON(w, &cashShift)
+	var products []models.ProductFiler
+	for spotID := range cashShifts.GetMapShifts() {
+		ps, err := c.poster.GetProducts(spotID, tx.Time, tx.Time)
+		if err != nil {
+			logger.Log.Errorf("GetProducts: err=%s", err)
+			common.SendError(w, http.StatusInternalServerError, "GetProducts err= %s\n", err)
+			return
+		}
+
+		products = append(products, ps...)
+	}
+
+	filters, err := c.repo.GetFilters()
+	if err != nil {
+		logger.Log.Errorf("GetFilters: err=%s", err)
+		common.SendError(w, http.StatusInternalServerError, "GetProducts err= %s\n", err)
+		return
+	}
+
+	var result []models.ProductFiler
+
+	for _, f := range filters {
+		for _, p := range products {
+			if p.ProductID == f.ProductID {
+				result = append(result, f)
+			}
+		}
+	}
+
+	common.RenderJSON(w, &result)
 }

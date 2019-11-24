@@ -30,14 +30,24 @@ func (r *repoImpl) GetFilters() ([]models.ProductFiler, error) {
 }
 
 func (r *repoImpl) SaveFilter(filters []models.ProductFiler) ([]models.ProductFiler, error) {
+	fs, err := r.GetFilters()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, f := range fs {
+		r.db.Session.Delete(&f)
+	}
+
 	for _, filter := range filters {
-		if err := r.db.Session.Save(&filter).Error; err != nil {
+		if err = r.db.Session.Save(&filter).Error; err != nil {
 			return nil, err
 		}
 	}
 
 	return filters, nil
 }
+
 func (r *repoImpl) DeleteFilter(filter models.ProductFiler) error {
 	if err := r.db.Session.Delete(&filter).Error; err != nil {
 		return err

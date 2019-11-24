@@ -16,6 +16,7 @@ import (
 
 type Poster interface {
 	GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixTime) (models.Shifts, error)
+	GetProducts(spotID string, dateFrom models.UnixTime, dateTo models.UnixTime) ([]models.ProductFiler, error)
 }
 
 func NewPoster() Poster {
@@ -27,6 +28,10 @@ type posterImpl struct {
 
 type posterResponse struct {
 	Response []models.CashShift `json:"response"`
+}
+
+type posterProductResponse struct {
+	Response []models.ProductFiler `json:"response"`
 }
 
 func (p *posterImpl) GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixTime) (models.Shifts, error) {
@@ -60,6 +65,46 @@ func (p *posterImpl) GetCashShifts(dateFrom models.UnixTime, dateTo models.UnixT
 	if err != nil {
 		return nil, err
 	}
+
+	return posterResp.Response, nil
+}
+
+func (p *posterImpl) GetProducts(spotID string, dateFrom models.UnixTime, dateTo models.UnixTime) ([]models.ProductFiler, error) {
+	posterURL, err := url.Parse(config.Conf.PosterURL)
+	if err != nil {
+		return nil, err
+	}
+	val := url.Values{}
+	val.Set("token", config.Conf.Token)
+	val.Add("dateFrom", fmt.Sprintf("%s", dateFrom.Format()))
+	val.Add("dateTo", fmt.Sprintf("%s", dateTo.Format()))
+	val.Add("spot_id", spotID)
+
+	posterURL.Path = "/api/dash.getProductsSales"
+	posterURL.RawQuery = val.Encode()
+
+	resp, err := http.Get(posterURL.String())
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	defer common.CloseRespBody(resp)
+
+	var posterResp posterProductResponse
+	err = json.Unmarshal(body, &posterResp)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, f := range posterResp.Response {
+		f.SpotID = spotID
+	}
+
+	logger.Log.Debugf("Received data from %s : %v", posterURL.String(), posterResp.Response)
 
 	return posterResp.Response, nil
 }
