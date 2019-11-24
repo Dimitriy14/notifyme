@@ -26,6 +26,8 @@ type Configuration struct {
 
 	HerokuPg string `json:"HerokuPg" environment:"DATABASE_URL"`
 
+	GmailPassword string `json:"gmail_password" environment:"GMAIL_PASSWORD"`
+
 	Postgres struct {
 		Host     string `json:"Host"`
 		Port     string `json:"Port"`

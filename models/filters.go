@@ -3,7 +3,7 @@ package models
 import "github.com/jinzhu/gorm"
 
 type ProductFiler struct {
-	gorm.Model
+	gorm.Model  `json:"-"`
 	SpotID      string `json:"spot_id"`
 	UserEmail   string `json:"user_email"`
 	ProductID   string `json:"product_id"`

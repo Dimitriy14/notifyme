@@ -6,7 +6,14 @@ import (
 	"time"
 )
 
-type Money uint64
+type Mail struct {
+	SpotID         string         `json:"spot_id"`
+	SpotName       string         `json:"spot_name"`
+	SpotAddress    string         `json:"spot_adress"`
+	AmountSellCash int            `json:"amount_sell_cash,string"`
+	AmountSellCard int            `json:"amount_sell_card,string"`
+	Products       []ProductFiler `json:"products"`
+}
 
 type WebHookTransaction struct {
 	ID   int      `json:"object_id"`
