@@ -7,6 +7,7 @@
 
   "HerokuPg":"postgres://rrvxhzckowcqgl:6046ccdb7566469e3ed006d380068ca2bb15cb974f1ad23a5e26a6388de80b48@ec2-54-246-92-116.eu-west-1.compute.amazonaws.com:5432/d3utt2vfngvic8",
 
+  "MailServiceURL":"http://notifymemail.herokuapp.com/sendmail",
   "Postgres": {
     "Host": "localhost",
     "Port": "5432",

@@ -24,7 +24,8 @@ type Configuration struct {
 	LogLevel string `json:"LogLevel" default:"debug"`
 	LogFile  string
 
-	HerokuPg string `json:"HerokuPg" environment:"DATABASE_URL"`
+	MailServiceURL string `json:"MailServiceURL" default:"http://notifymemail.herokuapp.com/sendmail"`
+	HerokuPg       string `json:"HerokuPg" environment:"DATABASE_URL"`
 
 	GmailPassword string `json:"gmail_password" environment:"GMAIL_PASSWORD"`
 

@@ -3,13 +3,14 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Dimitriy14/notifyme/logger"
 	"net/http"
+
+	"github.com/Dimitriy14/notifyme/logger"
 )
 
 const (
 	contentType     = "Content-Type"
-	applicationJSON = "application/json; charset=utf-8"
+	ApplicationJSON = "application/json; charset=utf-8"
 )
 
 //Error contains the message about error
@@ -38,7 +39,7 @@ func RenderJSON(w http.ResponseWriter, response interface{}) {
 }
 
 func render(w http.ResponseWriter, code int, response []byte) {
-	w.Header().Set(contentType, applicationJSON)
+	w.Header().Set(contentType, ApplicationJSON)
 	w.WriteHeader(code)
 	w.Write(response) //nolint
 }

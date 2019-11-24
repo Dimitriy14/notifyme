@@ -1,11 +1,10 @@
 package shift
 
 import (
+	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/smtp"
 	"strings"
 
 	"github.com/Dimitriy14/notifyme/config"
@@ -107,19 +106,14 @@ func (c *closerImpl) Close(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		m := fmt.Sprintf("Comment: %s", string(content))
-		mime := "MIME-version: 1.0;\nContent-Type: text/plain; charset=\"UTF-8\";\n\n"
-		subject := "Subject: " + "info" + "!\n"
-		msg := []byte(subject + mime + "\n" + m)
-
-		logger.Log.Debugf("mail body: %s", string(content))
-		a := smtp.PlainAuth("", "yankovskiydy98@gmail.com", config.Conf.GmailPassword, "smtp.gmail.com")
-		err = smtp.SendMail("smtp.gmail.com:587", a, "yankovskiydy98@gmail.com", []string{"road2ps@gmail.com"}, []byte(msg))
+		resp, err := http.Post(config.Conf.MailServiceURL, common.ApplicationJSON, bytes.NewReader(content))
 		if err != nil {
-			logger.Log.Errorf("Sending mail: err=%s", err)
-			common.SendError(w, http.StatusInternalServerError, "sending mail err= %s\n", err)
+			logger.Log.Errorf("Sending to mail service(url=%s): err=%s", config.Conf.MailServiceURL, err)
+			common.SendError(w, http.StatusInternalServerError, "Result marshal err= %s\n", err)
 			return
 		}
+
+		logger.Log.Debugf("Mail service %s response status: %d", config.Conf.MailServiceURL, resp.StatusCode)
 	}
 
 	common.RenderJSON(w, &cashShifts)
